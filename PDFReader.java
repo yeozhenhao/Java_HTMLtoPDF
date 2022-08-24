@@ -6,36 +6,86 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.io.File;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element; // Note that Element ?may also be imported from the iTextPDF module
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 public class PDFReader {
 	public static void main(String[] args) {
+		// NOTE: Use the right version of ChromeDriver - it must match your version in Google Chrome. See https://chromedriver.chromium.org/downloads/version-selection
+		LocalDateTime date_now_utc = LocalDateTime.now();
+		final String date_now_string = date_now_utc.format(DateTimeFormatter.ofPattern("dd-MM-yy HH-mm-ss"));
+		System.out.println("Date now is " + date_now_string);
+		
 		final String inputHTMLPath = "E:/LG Documents/JavaProjects/tempHTMLs/102.html";
-		final String outputPdfPath = "E:/LG Documents/JavaProjects/Java_HTMLtoPDF";
-		final String section_to_output = "section.k-section parsed";
-		final String Pdf_filename = "test.pdf";
+		final String outputPdfPath = "E:/LG Documents/JavaProjects/Java_HTMLtoPDF/";
+		final String cssquery_section_to_output = "section.k-section parsed";
+		final String Pdf_filetype = ".pdf";
 		String base_url = "https://medicine.nus.edu.sg/edutech/masteringpsychiatry_200108/#/reader/chapter/";
 		int page_number = 112;
 		int connection_timeout_millisecond = 3000; 
 		
+		final String path_to_driver = "C:/Users/elgen/Documents/JavaProjects/Java_HTMLtoPDF/chromedriver_win32/chromedriver.exe";
+		final String XPATH_section_to_print = "//section[@class = \"k-section parsed\"]";
+		final long implicit_wait_seconds = 1;
+		
+		// See https://webscraping.pro/java-selenium-headless-chrome-jsoup-to-scrape-data-of-the-web/
+		System.setProperty("webdriver.chrome.driver", path_to_driver);
+		ChromeOptions chromeOptions = new ChromeOptions();
+
+//		chromeOptions.setBinary("/path/to/other/chrome/binary");
+//		chromeOptions.addArguments("--headless");
+//		chromeOptions.addArguments("--enable-javascript");
+//		chromeOptions.addArguments("lang=en");
+		// I have added some arguments to chromeOptions in the code. The driver threw exceptions without them.
+//		chromeOptions.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
+//		chromeOptions.addArguments("start-maximized"); // open Browser in maximized mode
+//		chromeOptions.addArguments("disable-infobars"); // disabling infobars
+//		chromeOptions.addArguments("--disable-extensions"); // disabling extensions
+//		chromeOptions.addArguments("--disable-gpu"); // applicable to windows os only
+//		chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model
+		
+		ChromeDriver driver = new ChromeDriver(chromeOptions);
+		driver.manage().window().maximize();
+		driver.switchTo();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicit_wait_seconds)); // See https://www.selenium.dev/documentation/webdriver/waits/
+		driver.get(base_url + Integer.toString(page_number));
+		WebElement firstResult = new WebDriverWait(driver, Duration.ofSeconds(999)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_section_to_print)));
+		
+		Document html = Jsoup.parse(firstResult.getAttribute("outerHTML")); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
+//		Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
+		System.out.println("HTML Document:\n" + html.toString());
+//		Element htmlelement = html.selectFirst(cssquery_section_to_output);
+		createPdfFile(html.toString(), outputPdfPath + date_now_string + Pdf_filetype);
+		
 //        // Download the file
 //        Document document = HTML_Jsoup_parse(page_number, connection_timeout_millisecond, base_url);
 //        Element element = document_select_section(document, section_to_output);
-//        createPdfFile(element.toString(), outputPdfPath + Pdf_filename);
+//        createPdfFile(element.toString(), outputPdfPath + date_now_string + Pdf_filetype);
 		
 		// FOR TESTING ONLY
 		// Offline parsing works but gives <Can't load the XML resource (using TrAX transformer)> error - due to css file not found - tested by removing all lines in text editor with "css" involved.
 		
-		Document document = HTML_offline_parse(inputHTMLPath, base_url); // test with https://stackoverflow.com/questions/12043035/html-to-pdf-using-itext-external-css
-		createPdfFile(document.toString(), outputPdfPath + Pdf_filename);
+//		Document document = HTML_offline_parse(inputHTMLPath, base_url); // test with https://stackoverflow.com/questions/12043035/html-to-pdf-using-itext-external-css
+//		createPdfFile(document.toString(), outputPdfPath + date_now_string + Pdf_filetype);
+		driver.quit();
 	}
 	
 	
