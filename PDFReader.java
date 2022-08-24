@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.text.html.HTMLDocument;
+
 import java.io.File;
 
 import org.jsoup.Jsoup;
@@ -35,19 +38,26 @@ public class PDFReader {
 		System.out.println("Date now is " + date_now_string);
 		
 		final String inputHTMLPath = "E:/LG Documents/JavaProjects/tempHTMLs/102.html";
-		final String outputPdfPath = "E:/LG Documents/JavaProjects/Java_HTMLtoPDF/";
+		final String currentprojectPath = System.getProperty("user.dir") + "/";
+		System.out.println("currentprojectPath = " + currentprojectPath);
 		final String cssquery_section_to_output = "section.k-section parsed";
 		final String Pdf_filetype = ".pdf";
 		String base_url = "https://medicine.nus.edu.sg/edutech/masteringpsychiatry_200108/#/reader/chapter/";
 		int page_number = 112;
-		int connection_timeout_millisecond = 3000; 
+		int connection_timeout_millisecond = 3000;
 		
-		final String path_to_driver = "C:/Users/elgen/Documents/JavaProjects/Java_HTMLtoPDF/chromedriver_win32/chromedriver.exe";
+		final String path_to_driver = "chromedriver_win32/chromedriver.exe";
 		final String XPATH_section_to_print = "//section[@class = \"k-section parsed\"]";
 		final long implicit_wait_seconds = 1;
 		
+		final String cstylesheet_01_loc = "ionic.min.css";
+		final String cstylesheet_02_loc = "styles.min.css";
+		
+		final String css_code_01 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file://" + currentprojectPath + cstylesheet_01_loc + "\">" + "</link>"; // nothing to append at the end
+		final String css_code_02 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file://" + currentprojectPath + cstylesheet_02_loc + "\">" + "</link>"; //maybe can append "?c=21902"
+		
 		// See https://webscraping.pro/java-selenium-headless-chrome-jsoup-to-scrape-data-of-the-web/
-		System.setProperty("webdriver.chrome.driver", path_to_driver);
+		System.setProperty("webdriver.chrome.driver", currentprojectPath + path_to_driver);
 		ChromeOptions chromeOptions = new ChromeOptions();
 
 //		chromeOptions.setBinary("/path/to/other/chrome/binary");
@@ -70,21 +80,24 @@ public class PDFReader {
 		WebElement firstResult = new WebDriverWait(driver, Duration.ofSeconds(999)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_section_to_print)));
 		
 		Document html = Jsoup.parse(firstResult.getAttribute("outerHTML")); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
+		HTML_insertbefore(html, css_code_01, css_code_02);
+		
+//		html.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
 //		Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
 		System.out.println("HTML Document:\n" + html.toString());
 //		Element htmlelement = html.selectFirst(cssquery_section_to_output);
-		createPdfFile(html.toString(), outputPdfPath + date_now_string + Pdf_filetype);
+		createPdfFile(html.toString(), currentprojectPath + date_now_string + Pdf_filetype);
 		
 //        // Download the file
 //        Document document = HTML_Jsoup_parse(page_number, connection_timeout_millisecond, base_url);
 //        Element element = document_select_section(document, section_to_output);
-//        createPdfFile(element.toString(), outputPdfPath + date_now_string + Pdf_filetype);
+//        createPdfFile(element.toString(), currentprojectPath + date_now_string + Pdf_filetype);
 		
 		// FOR TESTING ONLY
 		// Offline parsing works but gives <Can't load the XML resource (using TrAX transformer)> error - due to css file not found - tested by removing all lines in text editor with "css" involved.
 		
 //		Document document = HTML_offline_parse(inputHTMLPath, base_url); // test with https://stackoverflow.com/questions/12043035/html-to-pdf-using-itext-external-css
-//		createPdfFile(document.toString(), outputPdfPath + date_now_string + Pdf_filetype);
+//		createPdfFile(document.toString(), currentprojectPath + date_now_string + Pdf_filetype);
 		driver.quit();
 	}
 	
@@ -169,7 +182,7 @@ public class PDFReader {
         	        }
 	        
 	     // See https://stackoverflow.com/questions/65959750/does-outputsettings-charset-also-change-meta-content-type for the functions below
-	        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // specify that we want XML output // As the next step, we'll use jsoup to convert the above HTML file to a jsoup Document to render XHTML.
+//	        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // specify that we want XML output // As the next step, we'll use jsoup to convert the above HTML file to a jsoup Document to render XHTML.
 //	        document.charset(StandardCharsets.UTF_8); // update the charset - also adds the <?xml encoding> instruction
 //	        document.select("meta[content~=charset]").remove(); // Remove the obsolete HTML meta tags
 	        System.out.println("\n---------------Document connected:---------------\n" + document.toString());
@@ -181,7 +194,7 @@ public class PDFReader {
 		return element;
 	}
 	
-	private static void createPdfFile(String url, String fileName) {
+	private static void createPdfFile(String html_content_in_string, String fileName) {
 		OutputStream outputStream = null;
 		try { // Note that we're wrapping our code in a try block to ensure the output stream is closed - see https://www.baeldung.com/java-html-to-pdf
 			outputStream = new FileOutputStream(fileName);
@@ -189,7 +202,7 @@ public class PDFReader {
     	    SharedContext sharedContext = renderer.getSharedContext();
     	    sharedContext.setPrint(true);
     	    sharedContext.setInteractive(false);
-    	    renderer.setDocument(url); // changed from renderer.setDocumentFromString(htmldoc); with input String htmldoc
+    	    renderer.setDocumentFromString(html_content_in_string); // changed from renderer.setDocument(uri)
     	    renderer.layout();
     	    renderer.createPDF(outputStream);
         } catch (Exception e) {
@@ -203,6 +216,13 @@ public class PDFReader {
         }
 	    System.out.println( "PDF file: '" + fileName + "' created." );
 	    }
+	
+	private static Document HTML_insertbefore(Document document, String css_code_01, String css_code_02) {
+//		document.selectFirst("html").child(0).before(css_code_01); // TODO: remove
+		document.selectFirst("head").after(css_code_02);
+		return document;
+	}
+	
 }
 
 class LinkNotAccessible extends Exception { 
