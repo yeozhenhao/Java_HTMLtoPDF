@@ -10,12 +10,6 @@
   		<version>1.15.2</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.itextpdf</groupId>
-  		<artifactId>itext7-core</artifactId>
-  		<version>7.2.3</version>
-  		<type>pom</type>
-  	</dependency>
-  	<dependency>
   		<groupId>org.xhtmlrenderer</groupId>
   		<artifactId>flying-saucer-pdf-openpdf</artifactId>
   		<version>9.1.22</version>
