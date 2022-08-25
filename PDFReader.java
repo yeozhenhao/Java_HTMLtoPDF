@@ -53,8 +53,8 @@ public class PDFReader {
 		final String cstylesheet_01_loc = "ionic.min.css";
 		final String cstylesheet_02_loc = "styles.min.css";
 		
-		final String css_code_01 = "<link rel=\"stylesheet\" type=\"text/css\" MEDIA=\"print, handheld\" href=\"file://" + currentprojectPath + cstylesheet_01_loc + "\"></link>"; // nothing to append at the end // Removed type=\"text/css\" //  + "</link>" doesn't work
-		final String css_code_02 = "<link rel=\"stylesheet\" type=\"text/css\" MEDIA=\"print, handheld\" href=\"file://" + currentprojectPath + cstylesheet_02_loc + "\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
+		final String css_code_01 = "<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"file://" + currentprojectPath + cstylesheet_01_loc + "\"></link>"; // nothing to append at the end // Removed type=\"text/css\" //  + "</link>" doesn't work
+		final String css_code_02 = "<link rel=\"stylesheet\" type=\"text/css\" media=\"print\" href=\"file://" + currentprojectPath + cstylesheet_02_loc + "\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
 		
 		// See https://webscraping.pro/java-selenium-headless-chrome-jsoup-to-scrape-data-of-the-web/
 		System.setProperty("webdriver.chrome.driver", currentprojectPath + path_to_driver);
