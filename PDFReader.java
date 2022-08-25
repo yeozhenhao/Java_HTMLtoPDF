@@ -53,8 +53,8 @@ public class PDFReader {
 		final String cstylesheet_01_loc = "ionic.min.css";
 		final String cstylesheet_02_loc = "styles.min.css";
 		
-		final String css_code_01 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file://" + currentprojectPath + cstylesheet_01_loc + "\">" + "</link>"; // nothing to append at the end
-		final String css_code_02 = "<link rel=\"stylesheet\" type=\"text/css\" href=\"file://" + currentprojectPath + cstylesheet_02_loc + "\">" + "</link>"; //maybe can append "?c=21902"
+		final String css_code_01 = "<link rel=\"stylesheet\" type=\"text/css\" MEDIA=\"print, handheld\" href=\"file://" + currentprojectPath + cstylesheet_01_loc + "\"></link>"; // nothing to append at the end // Removed type=\"text/css\" //  + "</link>" doesn't work
+		final String css_code_02 = "<link rel=\"stylesheet\" type=\"text/css\" MEDIA=\"print, handheld\" href=\"file://" + currentprojectPath + cstylesheet_02_loc + "\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
 		
 		// See https://webscraping.pro/java-selenium-headless-chrome-jsoup-to-scrape-data-of-the-web/
 		System.setProperty("webdriver.chrome.driver", currentprojectPath + path_to_driver);
@@ -80,13 +80,14 @@ public class PDFReader {
 		WebElement firstResult = new WebDriverWait(driver, Duration.ofSeconds(999)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_section_to_print)));
 		
 		Document html = Jsoup.parse(firstResult.getAttribute("outerHTML")); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
-		HTML_insertbefore(html, css_code_01, css_code_02);
+//		Document html_01 = HTML_insertbefore(html, css_code_01);
+		Document html_02 = HTML_insertbefore(html, css_code_02);
 		
-//		html.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+		html_02.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // See 
 //		Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
-		System.out.println("HTML Document:\n" + html.toString());
+		System.out.println("HTML Document:\n" + html_02.html());
 //		Element htmlelement = html.selectFirst(cssquery_section_to_output);
-		createPdfFile(html.toString(), currentprojectPath + date_now_string + Pdf_filetype);
+		createPdfFile(html_02.html(), currentprojectPath + date_now_string + Pdf_filetype);
 		
 //        // Download the file
 //        Document document = HTML_Jsoup_parse(page_number, connection_timeout_millisecond, base_url);
@@ -217,9 +218,10 @@ public class PDFReader {
 	    System.out.println( "PDF file: '" + fileName + "' created." );
 	    }
 	
-	private static Document HTML_insertbefore(Document document, String css_code_01, String css_code_02) {
+	private static Document HTML_insertbefore(Document document, String css_code) {
 //		document.selectFirst("html").child(0).before(css_code_01); // TODO: remove
-		document.selectFirst("head").after(css_code_02);
+		Element head = document.head();
+		head.append(css_code);
 		return document;
 	}
 	
