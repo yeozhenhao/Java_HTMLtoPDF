@@ -81,7 +81,7 @@ class RegexHandler { // no need public as it's the same package as Graphing.java
 		final static String UTF_setting = "UTF-8";
 		// See https://en.wikipedia.org/wiki/ASCII#Printable_characters for ASCII Charcter Set
 		// Note: \x0a is "\n" (line feed), and \x21 is " " (whitespace).
-		final static String regex_nbsp = "(?:&nbsp)";
+		final static String regex_nbsp = "(?:&nbsp[; ])";
 		
 		final static String regex_dash_filter = "\\x2d"; // - ; — is \\u2014, which will be removed by the ASCII filter function later
 		final static String regex_dash_replacement = ""; // we will eventually replace all "A2B5" back to dashes when uploading into bot
@@ -95,7 +95,7 @@ class RegexHandler { // no need public as it's the same package as Graphing.java
 		final static String regex_double_inverted_comma_replacement = "A2B5";
 		
 		public static String remove_nbsp(String string_to_reformat) {
-			String replaced = string_to_reformat.replaceAll(regex_nbsp, ""); // 2nd argument is the replacement text for each block/letter that matches
+			String replaced = string_to_reformat.replaceAll(regex_nbsp, " "); // 2nd argument is the replacement text for each block/letter that matches
 //			System.out.println("Replaced_nonASCII_output: " + replaced);
 				return replaced;
 		    }

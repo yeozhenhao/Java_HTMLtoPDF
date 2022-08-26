@@ -84,7 +84,6 @@ public class PDFReader {
 			Document html = Jsoup.parse(firstResult.getAttribute("outerHTML"), "", Parser.htmlParser()); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
 //			Document html_01 = HTML_insertbefore(html, css_internal);
 			Document html_02 = HTML_insertbefore(html, css_external);
-			html_02.selectFirst("section").child(0).before(css_code); // TODO add page numbering
 			
 			html_02.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // XHMTL format; fixes no /link end tag error. See 
 			System.out.println("HTML Document:\n" + html_02.html()); // OR Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
