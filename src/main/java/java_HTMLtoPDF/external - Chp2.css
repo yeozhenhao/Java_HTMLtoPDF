@@ -1,0 +1,103 @@
+@page { size:21.0cm 29.7cm; margin-top: 1cm; margin-bottom: 1cm; margin-right: 1cm; margin-left: 1cm; orphans:4; widows:4;}
+@media print {
+	p {
+		page-break-inside: avoid;
+	}
+	h2{
+		font-size: 1.6em;
+		color: #db6f67;
+		font-weight: 700;
+		line-height: 1.2;
+		font-family: 'Open Sans',sans-serif;
+		margin-bottom: 20px;
+		margin-top: 20px;
+		page-break-after : avoid;
+	}
+	address {
+		display: print;
+		font-size: 1em;
+		color: #333;
+		font-style: italic;
+		margin-bottom: 0.5em;
+		margin-top: 1.5em;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+		line-height: 1.42857;
+	}
+	table{
+		-fs-table-paginate:paginate;
+		border-spacing:0
+	}
+	tr:nth-child(2n+1){
+		background-color: #fbedec;
+	}
+	tr:nth-child(even){
+		background-color: #fdf6f6;
+	}
+	th {
+		border: 1px solid #fff;
+		padding: 0em 0.5em 0em 0.5em;
+		border-spacing: 5px;
+		margin: 0em 0em 0em 0em;
+		text-align: left;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
+	}
+	th[scope=col] {
+		background-color: #db6f67;
+		color: #fff;
+		font-weight: bold;
+	}
+	th[scope=row] {
+		background-color: #db6f67;
+		color: #fff;
+		font-weight: bold;
+	}
+	td {
+		border: 1px solid #fff;
+		padding: 0em 0.5em 0em 0.5em;
+		border-spacing: 5px;
+		margin: 0em 0em 0em 0em;
+		text-align: left;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
+	}
+	div.chaptertag {
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		background-color: #fbedec;
+		display: inline-block;
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 13px;
+		padding-bottom: 13px;
+		margin-top:-20px;
+		margin-right:0px;
+		margin-bottom:0px;
+		margin-left:0px;
+		border: 0;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
+		page-break-before: always;
+	}
+	* {
+		box-sizing: border-box;
+	}
+	#content {
+    display: table;
+	}
+
+	#pageFooter {
+		display: table-footer-group;
+	}
+
+	#pageFooter:after {
+		counter-increment: page;
+		content: counter(page);
+	}
+}
