@@ -30,12 +30,12 @@ public class PDFReader {
 		System.out.println("Date now is " + date_now_string);
 		
 //		final String inputHTMLPath = "E:/LG Documents/JavaProjects/tempHTMLs/102.html";
-		final String currentprojectPath = System.getProperty("user.dir") + "/";
-		System.out.println("currentprojectPath = " + currentprojectPath);
+		final String currentprojectPath = System.getProperty("user.dir") + "/src/main/java/java_HTMLtoPDF/";
+		System.out.println("currentprojectPath = \n" + currentprojectPath);
 		final String cssquery_section_to_output = "section.k-section parsed";
-		final String Pdf_filetype = ".pdf";
 		String base_url = "https://medicine.nus.edu.sg/edutech/masteringpsychiatry_200108/#/reader/chapter/";
-		int page_number = 5;
+		final int start_page = 9;
+		final int end_page = 9;
 		int connection_timeout_millisecond = 3000;
 		
 		final String path_to_driver = "chromedriver_win32/chromedriver.exe";
@@ -46,13 +46,15 @@ public class PDFReader {
 		final String cstylesheet_02_loc = "external.css";
 		
 		// NOTE: currentprojectPath + cstylesheet_02_loc AND "file://" + currentprojectPath + cstylesheet_02_loc DOES NOT WORK
-		System.out.println("Internal css path: " + currentprojectPath + "java_HTMLtoPDF/" + cstylesheet_01_loc);
-		final String css_internal = readUsingFiles(currentprojectPath + "java_HTMLtoPDF/" + cstylesheet_01_loc);
+		System.out.println("Internal css path: " + currentprojectPath + cstylesheet_01_loc);
+		final String css_internal = readUsingFiles(currentprojectPath + cstylesheet_01_loc);
 		System.out.println("*****Read internal css File to String Using Files Class*****\n" + css_internal);
-		final String css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cstylesheet_02_loc + "\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
+		final String css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + "src/main/java/java_HTMLtoPDF/" + cstylesheet_02_loc + "\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
 		
 		// See https://webscraping.pro/java-selenium-headless-chrome-jsoup-to-scrape-data-of-the-web/
 		System.setProperty("webdriver.chrome.driver", currentprojectPath + path_to_driver);
+		
+		// Set up the driver
 		ChromeOptions chromeOptions = new ChromeOptions();
 //		chromeOptions.setBinary("/path/to/other/chrome/binary");
 //		chromeOptions.addArguments("--headless");
@@ -65,26 +67,36 @@ public class PDFReader {
 //		chromeOptions.addArguments("--disable-extensions"); // disabling extensions
 //		chromeOptions.addArguments("--disable-gpu"); // applicable to windows os only
 //		chromeOptions.addArguments("--no-sandbox"); // Bypass OS security model
-		
 		ChromeDriver driver = new ChromeDriver(chromeOptions);
 		driver.manage().window().maximize();
 		driver.switchTo();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicit_wait_seconds)); // See https://www.selenium.dev/documentation/webdriver/waits/
-		driver.get(base_url + Integer.toString(page_number));
-		WebElement firstResult = new WebDriverWait(driver, Duration.ofSeconds(999)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_section_to_print)));
+		//REFERENCE FOR VARIABLES: htmlToPDF_fromToPages(ChromeDriver driver, int start_page, int end_page, String base_url, String currentprojectPath, String css_internal, String css_external, String XPATH_section_to_print)
+		htmlToPDF_fromToPages(driver, start_page, end_page, base_url, currentprojectPath, css_internal, css_external, XPATH_section_to_print);
+	}
+	
+	
+	public static void htmlToPDF_fromToPages(ChromeDriver driver, int start_page, int end_page, String base_url, String currentprojectPath, String css_internal, String css_external, String XPATH_section_to_print) {
+		for (int i = start_page; i < (end_page + 1); i++) {
+			driver.get(base_url + Integer.toString(start_page));
+			WebElement firstResult = new WebDriverWait(driver, Duration.ofSeconds(999)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(XPATH_section_to_print)));
+			
+			Document html = Jsoup.parse(firstResult.getAttribute("outerHTML"), "", Parser.htmlParser()); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
+//			Document html_01 = HTML_insertbefore(html, css_internal);
+			Document html_02 = HTML_insertbefore(html, css_external);
+			html_02.selectFirst("section").child(0).before(css_code); // TODO add page numbering
+			
+			html_02.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // XHMTL format; fixes no /link end tag error. See 
+			System.out.println("HTML Document:\n" + html_02.html()); // OR Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
+			
+//			String html_replaced_inline_html_01 = RegexHandler.replace_inline_css_without_class(html_02.html(), "body", "color:blue");
+//			String html_replaced_inline_html = RegexHandler.replace_inline_css_with_class(html_02.html(), "div", "color:red", "videoWrapper");
+//			String html_replaced_inline_html_02 = RegexHandler.replace_inline_css_without_class(html_replaced_inline_html_01, )
+//			System.out.println("html_replaced_inline_html_02:\n" + html_replaced_inline_html_02); 
+			String reformatted_str = RegexHandler.reformat_text(html_02.html()); // REPLACED html_replaced_inline_html_01
+			createPdfFile(reformatted_str,  currentprojectPath + "page " + Integer.toString(i) + ".pdf");
+		}
 		
-		Document html = Jsoup.parse(firstResult.getAttribute("outerHTML"), "", Parser.htmlParser()); // See https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver
-//		Document html_01 = HTML_insertbefore(html, css_internal);
-		Document html_02 = HTML_insertbefore(html, css_external);
-		
-		html_02.outputSettings().syntax(Document.OutputSettings.Syntax.xml); // XHMTL format; fixes no /link end tag error. See 
-		System.out.println("HTML Document:\n" + html_02.html()); // OR Document html = Jsoup.parse(driver.getPageSource()); // getting HTML code from ChromeDriver
-		
-//		String html_replaced_inline_html = RegexHandler.replace_inline_css_without_class(html_02.html(), "body", "color:blue");
-//		String html_replaced_inline_html = RegexHandler.replace_inline_css_with_class(html_02.html(), "div", "color:red", "videoWrapper");
-		System.out.println("html_replaced_inline_html:\n" + html_replaced_inline_html); 
-		String reformatted_str = RegexHandler.reformat_text(html_replaced_inline_html);
-		createPdfFile(reformatted_str, currentprojectPath + "java_HTMLtoPDF/" + date_now_string + Pdf_filetype);
 //        // Download the file using url
 //        Document document = HTML_Jsoup_parse(page_number, connection_timeout_millisecond, base_url);
 //        Element element = document.head().selectFirst(section_to_output);
@@ -94,9 +106,6 @@ public class PDFReader {
 //		createPdfFile(document.toString(), currentprojectPath + date_now_string + Pdf_filetype);
 		driver.quit();
 	}
-	
-	
-
 	
 	
 	private static void createPdfFile(String html_content_in_string, String fileName) {
