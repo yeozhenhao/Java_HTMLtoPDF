@@ -146,6 +146,7 @@ public class PDFReader {
 ////        document.select("meta[content~=charset]").remove(); // Remove the obsolete HTML meta tags
 //    } catch (IOException ignored) {
 //    }
+	
 //        System.out.println("\n---------------Document parsed:---------------\n" + document.toString());
 //    return document;
 //    }
