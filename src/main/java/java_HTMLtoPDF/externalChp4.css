@@ -1,0 +1,100 @@
+@page { size:21.0cm 29.7cm; margin-top: 1cm; margin-bottom: 1cm; margin-right: 1cm; margin-left: 1cm; }
+@media print {
+	element.style {
+		padding: 20px;
+		border-radius: 3px;
+		border-width: 0px;
+		border-color: rgb(170, 170, 170);
+		background-color: #f4faf7;
+	}
+    p {
+		page-break-inside: avoid;
+	}
+	h2{
+		font-size: 1.6em;
+		color: #4dae7f;
+		font-weight: 700;
+		line-height: 1.2;
+		font-family: 'Open Sans',sans-serif;
+		margin-bottom: 20px;
+		margin-top: 20px;
+		page-break-after : avoid;
+	}
+	address {
+		display: print;
+		font-size: 1em;
+		color: #333;
+		font-style: italic;
+		margin-bottom: 0.5em;
+		margin-top: 1.5em;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		vertical-align: baseline;
+		line-height: 1.42857;
+	}
+	table{
+		-fs-table-paginate:paginate;
+		border-spacing:0
+	}
+	tr:nth-child(2n+1){
+		background-color: #e9f5ef;
+	}
+	tr:nth-child(even){
+		background-color:#f4faf7;
+	}
+	th {
+		background-color: #4dae7f;
+		color: #fff;
+		font-weight: bold;
+		border: 1px solid #fff;
+		padding: 0em 0.5em 0em 0.5em;
+		border-spacing: 5px;
+		border-collapse: collapse;
+		margin: 0em 0em 0em 0em;
+		text-align: left;
+	}
+	th[scope=col] {
+		background-color: #4dae7f;
+		color: #fff;
+		font-weight: bold;
+	}
+	th[scope=row] {
+		background-color: #4dae7f;
+		color: #fff;
+		font-weight: bold;
+	}
+	td {
+		border: 1px solid #fff;
+		padding: 0em 0.5em 0em 0.5em;
+		border-spacing: 5px;
+		margin: 0em 0em 0em 0em;
+		text-align: left;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
+	}
+	div.chaptertag {
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		background-color: #e9f5ef;
+		display: inline-block;
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 13px;
+		padding-bottom: 13px;
+		margin: 0;
+		border: 0;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
+		page-break-before: always;
+	}
+	* {
+		box-sizing: border-box;
+		font-family: Helvetica, Arial, sans-serif;
+	}
+	#content {
+    display: table;
+	}
+}
