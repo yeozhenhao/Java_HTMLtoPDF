@@ -3,23 +3,53 @@ package java_HTMLtoPDF;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.delicacies.matching.InvalidDataException;
-
 class RegexHandler { // no need public as it's the same package as Graphing.java where it's used
 	// The consolidated function that does everything we need
 	public static String reformat_text(String string_to_reformat) {
 //		String test = "€Št,\nâ ˜ rœédiš? c 2fé™"; // TESTED WORKING: \n, whitespace, i'll i'm I'm don't wasn't wouldn't i'd I'd it's it'd who's what's that's aren't we're 'derp' '"' + "derp" + '"'
 		String test2 = remove_nbsp(string_to_reformat);
-//    	String test3 = replace_comma(test2);
+    	String test3 = replace_input_tags(test2);
 //    	String test4 = replace_dash(test3);
 //    	String test5 = replace_single_inverted_comma(test4);
 //    	String test6 = replace_double_inverted_comma(test5);
 //    	String test7 = convert_UTF8(test6); // remove nonASCII after converting to UTF8, as there may be some extra weird characters
 //    	String test8 = remove_nonASCII(test7);
-    	System.out.println("Reformatted_output: " + test2);
-    	return test2;
+    	System.out.println("Reformatted_output: " + test3);
+    	return test3;
 	    }
 	
+//	 Cheap way to replace all input: radio tags with a lame box // See https://stackoverflow.com/questions/6133581/html-to-pdf-using-itext-how-can-produce-a-checkbox
+	public static String replace_input_tags (String string_to_reformat) {
+		String replaced_01 = "";
+		
+		final String regex_input_tags = "(?:<input)(?:[^<])*?(?:radio)(?:[^<])*?(?:>)";
+		final String input_tags_replacement = "[___]"; // Unicode character for box
+		Pattern p1 = Pattern.compile(regex_input_tags);
+		Matcher m1 = p1.matcher(string_to_reformat);
+		if (m1.find()) {
+			replaced_01 = string_to_reformat.replaceAll(regex_input_tags, input_tags_replacement);
+		} else {
+			replaced_01 = string_to_reformat;
+		}
+		return replaced_01;
+	}
+	
+	// Converts all radio tags to checkbox
+	// But somehow this only converts only one of the input: radio into input: checkbox per practice question
+//	public static String replace_input_tags (String string_to_reformat) {
+//		String replaced_01 = "";
+//		
+//		final String regex_input_tags = "(?<=type=\")(?:(radio)[^<]*?)(?=\")";
+//		final String input_tags_replacement = "checkbox"; // Unicode character for box
+//		Pattern p1 = Pattern.compile(regex_input_tags);
+//		Matcher m1 = p1.matcher(string_to_reformat);
+//		if (m1.find()) {
+//			replaced_01 = string_to_reformat.replaceAll(regex_input_tags, input_tags_replacement);
+//		} else {
+//			replaced_01 = string_to_reformat;
+//		}
+//		return replaced_01;
+//	}
 	
 	// Note: the below function removes all class tags if needed
 	public static String replace_inline_css_without_class(String string_to_reformat, String tag_name, String css_code) {
@@ -33,7 +63,7 @@ class RegexHandler { // no need public as it's the same package as Graphing.java
 		replaced_01 = string_to_reformat.replaceAll(setup_regex, setup_regex_replacement);
 		System.out.println("\nreplaced_01" + replaced_01);
 		
-		final String regex_already_have_styles = "(?<=\\<" + tag_name + " )([^<]*?)(?=\\>)"; // instead of "\\b)(.*?)(?=\\>)" // Note: ([^<]*?) means all except <; because (.*?) would have still captured ">Videos</h1" in "<h1>Videos</h1>"
+		final String regex_already_have_styles = "(?<=\\<" + tag_name + " )([^<])*?(?=\\>)"; // instead of "\\b)(.*?)(?=\\>)" // Note: ([^<]*?) means all except <; because (.*?) would have still captured ">Videos</h1" in "<h1>Videos</h1>"
 		final String already_have_styles_replacement = "style=\"" + css_code + "\"";
 		Pattern p1 = Pattern.compile(regex_already_have_styles);
 		Matcher m1 = p1.matcher(replaced_01);
