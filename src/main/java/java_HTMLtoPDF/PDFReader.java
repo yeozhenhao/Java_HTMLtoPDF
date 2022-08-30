@@ -45,8 +45,8 @@ public class PDFReader {
 		System.out.println("currentprojectPath = \n" + currentprojectPath);
 		final String cssquery_section_to_output = "section.k-section parsed";
 		String base_url = "https://medicine.nus.edu.sg/edutech/masteringpsychiatry_200108/#/reader/chapter/";
-		final int start_page = 27;
-		final int end_page = 450;
+		final int start_page = 310;
+		final int end_page = 310;
 		int connection_timeout_millisecond = 3000;
 		
 		final String path_to_driver = "chromedriver_win32/chromedriver.exe";
@@ -126,7 +126,13 @@ public class PDFReader {
 		else if (285 <= page_number && page_number <= 298) { // chp13
 			css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + "src/main/java/java_HTMLtoPDF/externalChp1" + ".css\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
 		}
-		else if (299 <= page_number && page_number <= 318) { // chp14
+		else if (299 <= page_number && page_number <= 309) { // chp14
+			css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + "src/main/java/java_HTMLtoPDF/externalChp2" + ".css\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
+		}
+		else if (page_number == 310) { // chp14
+			css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + "src/main/java/java_HTMLtoPDF/externalChp2pg310" + ".css\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
+		}
+		else if (311 <= page_number && page_number <= 318) { // chp14
 			css_external = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + "src/main/java/java_HTMLtoPDF/externalChp2" + ".css\" media=\"print\"></link>"; //maybe can append "?c=21902" // type=\"text/css\" //  + "</link>" doesn't work 
 		}
 		else if (319 <= page_number && page_number <= 336) { // chp15
