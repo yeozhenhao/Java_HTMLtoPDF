@@ -53,6 +53,9 @@
 		border-collapse: collapse;
 		margin: 0em 0em 0em 0em;
 		text-align: left;
+		vertical-align: baseline;
+		font: inherit;
+		font-size: 100%;
 	}
 	th[scope=col] {
 		background-color: #e1b53e;
@@ -83,7 +86,10 @@
 		padding-right: 15px;
 		padding-top: 13px;
 		padding-bottom: 13px;
-		margin: 0;
+		margin-top: 0px;
+		margin-right: 0px;
+		margin-bottom: 0px;
+		margin-left: 0px;
 		border: 0;
 		vertical-align: baseline;
 		font: inherit;

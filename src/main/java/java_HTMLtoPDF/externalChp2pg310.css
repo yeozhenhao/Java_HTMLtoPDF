@@ -1,4 +1,4 @@
-@page { size:21.0cm 29.7cm; margin-top: 1cm; margin-bottom: 1cm; margin-right: 1cm; margin-left: 1cm; orphans:4; widows:4;}
+@page { size:29.7cm 29.7cm; margin-top: 1cm; margin-bottom: 1cm; margin-right: 1cm; margin-left: 1cm; orphans:4; widows:4;}
 @media print {
 	element.style {
 		padding: 20px;

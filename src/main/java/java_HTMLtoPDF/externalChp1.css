@@ -85,7 +85,10 @@
 		padding-right: 15px;
 		padding-top: 13px;
 		padding-bottom: 13px;
-		margin: 0;
+		margin-top: 0px;
+		margin-right: 0px;
+		margin-bottom: 0px;
+		margin-left: 0px;
 		border: 0;
 		vertical-align: baseline;
 		font: inherit;
