@@ -38,7 +38,7 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 **A.** The connection was automatically rejected as it detected that I was not a true browser (automated anti-spam detection; as I was using a script to access the URL). I got the error as [shown here](https://stackoverflow.com/questions/38338418/java-jsoup-html-parsing-robot-index-bot-detection-noindex). After analysing the HTTP connection using my own Google Chrome, I added what was needed to make a HTTP connection: 
 - Properties to the connection to simulate a real browser connection (e.g. userAgent, cookies)
 - Added the specific cookies the website is looking after analysing the HTML connection through my own Google Chrome<br>
->> Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**<br>
+> Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**<br>
 | ![](./pics/SCD02.png)
 |:---:| 
 | *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
@@ -51,7 +51,7 @@ Despite being able to simulate a true browser connection, I discovered that the 
 - Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
 
 With **ChromeDriver**, I do not even have to worry about simulating a real browser connection, or worry about not being able to load Web Apps. With ChromeDriver, you *could* essentially retrieve HTML code from any ebook reader online!
-| ![](./pics/SCD03.png)
+| ![](./pics/SCD3.png)
 |:---:| 
 | *ChromeDriver just makes loading any webpage too easy!* |
 
@@ -88,7 +88,7 @@ I then used XPATH to find and retrieve the HTML element I want. With `XPATH_sect
 ##### <ins>Jsoup: a Java module that easily parses HTML code into a PDF</ins>
 **iTextPDF5** is [an **end-of-life module** that is no longer being updated, except for security fixes](https://itextpdf.com/products/itext-5-legacy). The creators of **iTextPDF5** have went on to create a commercial version, [**iTextPDF7**](https://itextpdf.com/products/itext-7/itext-7-core) that is much more advanced that it can *probably* print webpages better than your default *print to PDF* function of your computer. Nevertheless, **iTextPDF5** still works pretty well in my use case.
 
-**iTextPDF5** easily parses HTML code into a PDF, retaining most of the formatting based *HTML tags (e.g. <h1>, <h2>)* and *CSS (Cascading style sheet)* code.
+**iTextPDF5** easily parses HTML code into a PDF, retaining most of the formatting based *HTML tags (e.g. h1, h2)* and *CSS (Cascading style sheet)* code.
 
 I created various CSS files as needed for the output PDF. For example, I made a CSS document **just for page 310** of the ebook(*externalChp2pg310.css*) to export it as a *29.7cm x 29.7cm* PDF document to fit the huge table.
 | ![](./pics/itext1.png)
