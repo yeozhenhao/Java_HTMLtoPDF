@@ -185,4 +185,4 @@ Extract the ChromeDriver zip file into the `java_htmltopdf/src/main/java/java_HT
 |:---:| 
 |*Leave it in the default name `chromedriver_win32`*|
 
-*And you're done! You should be able to run the script and create the PDF*
+*And you're done! You should be able to run the script and create your own PDF!*
