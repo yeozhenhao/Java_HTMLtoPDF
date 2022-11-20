@@ -21,7 +21,7 @@ The following improvements were made to the 7ed PDF as compared to that on the N
 With permission from the authors, I shared the PDF with my batchmates. It helped me and my batchmates study Psychiatry better.
 
 ##### <ins>Java modules used:</ins>
-- Selenium with ChromeDriver to load up HTML5 elements (which cannot be loaded with Jsoup alone)
+- Selenium with ChromeDriver to load up HTML5 & WebApp elements (which cannot be loaded with Java URL connection classes)
 - Jsoup to retrieve HTML code
 - iText5 (aka Flying Saucer) to convert HTML to PDF with my custom CSS file
 
