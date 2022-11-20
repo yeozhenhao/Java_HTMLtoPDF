@@ -31,7 +31,7 @@ In this section, I detail the errors encountered and lessons I learnt, organised
 ### The website makes it too easy to load the different pages of the ebook
 I noticed that if I wanted to load, say *page 245* of the ebook, I would simply just need to change the last few digits of the URL e.g. (ebook_URL)/201 to (ebook_URL)/245 to jump from *page 201* to *page 245*. Thus, you could easily use a loop function to loop through loading through all of the pages of the ebook.
 
-### Selenium ChromeDriver: the best way to load up HTML5 elements
+### Module 1/3: Selenium ChromeDriver: the best way to load up HTML5 elements
 ##### <ins>Mistake/Lesson 01: Accessing HTML code using a URI connection in Java instead of reading it from a loaded webpage on Selenium ChromeDriver</ins>
 I initally loaded up webpages using `HttpURLConnection` & `URL` classes to access the HTML code. However, I encountered two errors:
 | ![](./pics/SCD1.png)
@@ -58,7 +58,7 @@ With **ChromeDriver**, I do not even have to worry about simulating a real brows
 |:---:| 
 | *ChromeDriver just makes loading any webpage too easy!* |
 
-### Jsoup to retrieve HTML data
+### Module 2/3: Jsoup to retrieve HTML data
 ##### <ins>Jsoup: a Java module that easily manipulates HTML code</ins>
 **Jsoup** easily manipulates HTML code into a PDF. With **Jsoup**, I can easily add *custom* HTML code (e.g. Cascading style sheet [CSS] code) to the front or the back of the HTML code extracted from the website. Adding CSS code into the HTML before **iTextPDF** parses the entire HTML code (explained later) lets me design however I want the output PDF to be, which even look entirely different from the ebook! 
 
@@ -87,7 +87,7 @@ I then used XPATH to find and retrieve the HTML element I want. With `XPATH_sect
 | **Variable:** *`XPATH_section_to_print = "//section[@class = \"k-section parsed\"]"* |
 
 
-### iTextPDF5 (aka Flying Saucer) to parse HTML data into PDF
+### Module 3/3: iTextPDF5 (aka Flying Saucer) to parse HTML data into PDF
 ##### <ins>Jsoup: a Java module that easily parses HTML code into a PDF</ins>
 **iTextPDF5** is [an **end-of-life module** that is no longer being updated, except for security fixes](https://itextpdf.com/products/itext-5-legacy). The creators of **iTextPDF5** have went on to create a commercial version, [**iTextPDF7**](https://itextpdf.com/products/itext-7/itext-7-core) that is much more advanced that it can *probably* print webpages better than your default *print to PDF* function of your computer. Nevertheless, **iTextPDF5** still works pretty well in my use case.
 
@@ -96,7 +96,7 @@ I then used XPATH to find and retrieve the HTML element I want. With `XPATH_sect
 I created various CSS files as needed for the output PDF. For example, I made a CSS document **just for page 310** of the ebook(*externalChp2pg310.css*) to export it as a *29.7cm x 29.7cm* PDF document to fit the huge table.
 | ![](./pics/itext1.png)
 |:---:| 
-| *Content of externalChp2pg310.css document. Here, the output document size, font attributes etc. can be changed to be different from the webpage! * |
+| *Content of externalChp2pg310.css document. Here, the output document size, font attributes etc. can be changed to be different from the webpage!* |
 | ![](./pics/itext2.png)
 | *Huge table (page below) would be cut off if it were exported as an A4-sized page (page above)* |
 
@@ -105,8 +105,8 @@ I created various CSS files as needed for the output PDF. For example, I made a 
 |:---:| 
 | *Embedding fonts into PDF with the ITextFontResolver class* |
 
-### Making every component work together for the final product
-##### <ins>Every function created works together in the *main* function of the *PDFReader* class</ins>
+### All 3 work together for the final product
+##### <ins>All 3 modules work together in the *main* function of the *PDFReader* class</ins>
 Simply set the *start_page* & *end_page* integer variables to set the pages to export, and watch how all the modules beautifully work together to export the PDF.
 | ![](./pics/demo1.gif)
 |:---:| 
@@ -117,12 +117,12 @@ Simply set the *start_page* & *end_page* integer variables to set the pages to e
 However, if you run the script for many pages, it may receive a **browser pop-up alert** that informs you that a page failed to load. Thus, you need code to automatically accept the alerts with Selenium ChromeDriver.
 | ![](./pics/alert1.png)
 |:---:| 
-| *Code to automatically accept and alert if it sees one. If alert is not found, then continue script. * |
+| *Code to automatically accept and alert if it sees one. If alert is not found, then continue script.* |
 
 Sometimes, even after accepting the alert, the ebook reader may randomly just show a blank page. Thus, I coded Selenium to check if *"k-section parsed" HTML element* exists in webpage. If not, then re-run the script for the same page (by using *i--* to re-load the same HTML page of the ebook!).
 | ![](./pics/alert2.png)
 |:---:| 
-| *Without i--, if the script fails to find the "k-section parsed" HTML element, it would move on to export the next page, which is not what we want. * |
+| *Without i--, if the script fails to find the "k-section parsed" HTML element, it would move on to export the next page, which is not what we want.* |
 
 
 # Downloading & Using this project
