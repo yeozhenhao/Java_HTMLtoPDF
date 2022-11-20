@@ -273,7 +273,7 @@ public class PDFReader {
             File lfFile = new File(FONT_DIR + lsFontFile);
 //        	BaseFont base = BaseFont.createFont(FONT_DIR + lsFontFile, BaseFont.IDENTITY_H, true); // TODO: delete
 //            System.out.println("Absolute path: " + lfFile.getAbsolutePath());
-            poF.addFont(lfFile.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED); // Default fonts like Arial and Helvetica cannot be embedded by default (i.e. the font is stored as code for pdf file readers to interpret. However, we now    
+            poF.addFont(lfFile.getAbsolutePath(), BaseFont.IDENTITY_H, BaseFont.EMBEDDED); // Default fonts like Arial and Helvetica cannot be embedded by default (i.e. the font is stored as code for pdf file readers to interpret. However, now we can as we have the .ttf files.
         }
     }
 	
