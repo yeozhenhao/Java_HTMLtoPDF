@@ -49,10 +49,6 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 **B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) and **Kotobee ebook reader web application** (the Java classes can only load up **basic HTML elements**). The **Kotobee ebook reader Web App** is used by the website to generate the HTML code of the ebook content (which is displayed as a webpage) stored on the server.
 - I had encountered *"The Kotobee reader web application needs to be run through a web server"* error using `HttpURLConnection` & `URL` classes to connect to the URL.
 
-
-Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) (they can only load basic **HTML**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
-- Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
-
 With **ChromeDriver**, I do not even have to worry about simulating a real browser connection, or worry about not being able to load Web Apps. With ChromeDriver, you *could* essentially retrieve HTML code from any ebook reader online!
 | ![](./pics/SCD3.png)
 |:---:| 
