@@ -46,7 +46,7 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 |:---:| 
 | *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
 
-**B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) and **Kotobee ebook reader web application** (the Java classes can only load up **basic HTML elements**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
+**B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) and **Kotobee ebook reader web application** (the Java classes can only load up **basic HTML elements**). The **Kotobee ebook reader Web App** is used by the website to generate the HTML code of the ebook content (which is displayed as a webpage) stored on the server.
 - Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
 
 
