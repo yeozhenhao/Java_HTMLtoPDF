@@ -105,14 +105,14 @@ I created various CSS files as needed for the output PDF. For example, I made a 
 |:---:| 
 | *Embedding fonts into PDF with the ITextFontResolver class* |
 
-### All 3 work together for the final product
+### DEMO: All 3 work together for the final product
 ##### <ins>All 3 modules work together in the *main* function of the *PDFReader* class</ins>
 Simply set the *start_page* & *end_page* integer variables to set the pages to export, and watch how all the modules beautifully work together to export the PDF.
 | ![](./pics/demo1.gif)
 |:---:| 
-| *Exporting pages 310-312 from NUS Medicine ebook website as PDF* |
+| **DEMO:** *Exporting pages 310-312 from NUS Medicine ebook website as PDF* |
 | ![](./pics/demo2.gif)
-| *Exporting pages 263-265 from NUS Medicine ebook website as PDF* |
+| **DEMO:** *Exporting pages 263-265 from NUS Medicine ebook website as PDF* |
 
 However, if you run the script for many pages, it may receive a **browser pop-up alert** that informs you that a page failed to load. Thus, you need code to automatically accept the alerts with Selenium ChromeDriver.
 | ![](./pics/alert1.png)
