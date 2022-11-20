@@ -105,7 +105,7 @@ I created various CSS files as needed for the output PDF. For example, I made a 
 |:---:| 
 | *Embedding fonts into PDF with the ITextFontResolver class* |
 
-### DEMO: All 3 work together for the final product
+### DEMO: All 3 modules work together for the final product
 ##### <ins>All 3 modules work together in the *main* function of the *PDFReader* class</ins>
 Simply set the *start_page* & *end_page* integer variables to set the pages to export, and watch how all the modules beautifully work together to export the PDF.
 | ![](./pics/demo1.gif)
