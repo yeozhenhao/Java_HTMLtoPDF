@@ -26,118 +26,93 @@ With permission from the authors, I shared the PDF with my batchmates. It helped
 - iText5 (aka Flying Saucer) to convert HTML to PDF with my custom CSS file
 
 # How this project works
+In this section, I detail the errors encountered and lessons I learnt, organised by the modules that were eventually used.
 
-##### <ins>Installing Selenium</ins>
-**1.** Install *Eclipse* and *Java Development Kit (JDK)*
-| ![](./pics/JavaBuildPath_Edit_Debug00.png)
+### Selenium ChromeDriver: the best way to load up HTML5 elements
+##### <ins>Mistake/Lesson 01: Accessing HTML code using a URI connection in Java instead of reading it from a loaded webpage on Selenium ChromeDriver</ins>
+I initally loaded up webpages using `HttpURLConnection` & `URL` classes to access the HTML code. However, I encountered two errors:
+| ![](./pics/SCD1.png)
 |:---:| 
-| *Install the latest JDK* |
+| *`HttpURLConnection` & `URL` classes (available from the java.net package) to access the HTML code* |
 
-**2.** Click *File* -> *Import*
-| ![](./pics/install_step01.png)
+**A.** The connection was automatically rejected as it detected that I was not a true browser (automated anti-spam detection; as I was using a script to access the URL). I got the error as [shown here](https://stackoverflow.com/questions/38338418/java-jsoup-html-parsing-robot-index-bot-detection-noindex). After analysing the HTTP connection using my own Google Chrome, I added what was needed to make a HTTP connection: 
+- Properties to the connection to simulate a real browser connection (e.g. userAgent, cookies)
+- Added the specific cookies the website is looking after analysing the HTML connection through my own Google Chrome<br>
+>> Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**<br>
+| ![](./pics/SCD02.png)
 |:---:| 
-| *This Imports + Clones from the Github repository simultaneously* |
+| *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
 
-**3.** Click Projects from Git
-| ![](./pics/install_step02.png)
+**B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) (they can only load basic **HTML**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
+- Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
+
+
+Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) (they can only load basic **HTML**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
+- Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
+
+With **ChromeDriver**, I do not even have to worry about simulating a real browser connection, or worry about not being able to load Web Apps. With ChromeDriver, you *could* essentially retrieve HTML code from any ebook reader online!
+| ![](./pics/SCD03.png)
 |:---:| 
-| *Projects from Git (with smart import) should also work* |
+| *ChromeDriver just makes loading any webpage too easy!* |
 
-**4.** Select Clone URI
-| ![](./pics/install_step03.png)
+### Jsoup to retrieve HTML data
+##### <ins>Jsoup: a Java module that easily manipulates HTML code</ins>
+**Jsoup** easily manipulates HTML code into a PDF. With **Jsoup**, I can easily add *custom* HTML code (e.g. Cascading style sheet [CSS] code) to the front or the back of the HTML code extracted from the website. Adding CSS code into the HTML before **iTextPDF** parses the entire HTML code (explained later) lets me design however I want the output PDF to be, which even look entirely different from the ebook! 
+
+I created a *HTML_insertbefore* function to use **Jsoup** to read a CSS file (*css_external.css*) and add the CSS code to the *beginning* of the overall HTML code extracted from the website.
+| ![](./pics/jsoup1.png)
 |:---:| 
-||
+| *css_external.css contains HTML code that determines how a webpage looks. e.g. size & type of fonts* |
 
-**5.** Paste the GitHub clone URL into the URI, and the rest of the fields should be automatically filled.
+To export out the HTML element, we will export out the *outerHTML* attribute. [**outerHTML is an element property whose value is the HTML between the opening and closing tags and the HTML of the selected element itself.**](https://www.browserstack.com/guide/get-html-source-of-web-element-in-selenium-webdriver)
 
-
-
-# DEBUGGING
-##### <ins>How to edit README in the parent directory</ins>
-###### By default, you cannot see the README.md file in your Package Explorer tab on your left.
-This is because parent directory (which normally includes only .gitignore, LICENSE and README.md files) are hidden from view due to filters. To remove the filters, access README.md through the *Working Tree* in the **Git Repositories** tab.
-
-| ![](./pics/how_to_edit_README_in_parent_directory.png)
+However, we only want to extract the HTML code of the HTML element that is relevant for us. There are lots of HTML codes for the ebook reader that are irrelevant for the output PDF, like the Content page bar on the left.
+| ![](./pics/jsoup2.png)
 |:---:| 
-| *Remember to switch to Markdown Source from Preview!* |
+| *HTML code of HTML elements irrelevant in our output PDF* |
 
-##### <ins>Problems with the Java Build Path</ins>
-###### You need to fix this as long as you get weird errors when running the Java main class.
-
-Some examples of runtime errors due to Build Path problems include:
-- Not being able to import basic java classes like java.io
-- No such basic Java classes detected at runtime
-- Getting a Windows alert popup asking you to recheck the JDK installation
-
-**1.** Ensure that the latest **Java Development Kit (JDK)** is installed. It is used in Eclipse to develop Java applications.\
-**Do not mix it up with plain Java** which is used to run Java applications and for unknown reason appears as a much lower version of 1.8 instead of 18 in Eclipse (a good indication that you are doing something wrong).
-
-| ![](./pics/JavaBuildPath_Edit_Debug00.png)
+After inspecting the elements, I discovered that the only relevant HTML element is the element with *class attribute* **"k-section parsed"**. 
+| ![](./pics/jsoup3.png)
 |:---:| 
-| *Do not mix it up with plain Java!* |
+| *HTML element "k-section parsed" contains the content. We can confirm this by inspecting a paragraph, and we find that the <p>...</p> paragraph HTML elements are stored under the "k-section parsed" element!* |
+| ![](./pics/jsoup4.png)
 
-**2.** Right click on the project in the Package Explorer, then click *Properties*, then *Java Build Path* in the left.
+I then used XPATH to find and retrieve the HTML element I want. With `XPATH_section_to_print = "//section[@class = \"k-section parsed\"]"`, I extracted the HTML element with the class *k-section parsed"*, which happens to be the only HTML element with such a class name in the webpage. 
 
-Then, click the *Libraries* tab, select the JRE System Library then click *Edit*. Then, select *Execution environment* according to the latest installed JDK version (which is 18 in this case). If this does not exist, it will show "unbound".
-
-| ![](./pics/JavaBuildPath_Edit_Debug01.png)
+| ![](./pics/jsoup5.png)
 |:---:| 
-| *Select Execution environment* |
+| **Variable:** *`XPATH_section_to_print = "//section[@class = \"k-section parsed\"]"* |
 
-**3.** Click *Installed JREs* and simply click *Add* to add your newly installed JDK by linking straight to the installed parent directory.
 
-| ![](./pics/JavaBuildPath_Edit_Debug02.png)
+### iTextPDF5 (aka Flying Saucer) to parse HTML data into PDF
+##### <ins>Jsoup: a Java module that easily parses HTML code into a PDF</ins>
+**iTextPDF5** is [an **end-of-life module** that is no longer being updated, except for security fixes](https://itextpdf.com/products/itext-5-legacy). The creators of **iTextPDF5** have went on to create a commercial version, [**iTextPDF7**](https://itextpdf.com/products/itext-7/itext-7-core) that is much more advanced that it can *probably* print webpages better than your default *print to PDF* function of your computer. Nevertheless, **iTextPDF5** still works pretty well in my use case.
+
+**iTextPDF5** easily parses HTML code into a PDF, retaining most of the formatting based *HTML tags (e.g. <h1>, <h2>)* and *CSS (Cascading style sheet)* code.
+
+I created various CSS files as needed for the output PDF. For example, I made a CSS document **just for page 310** of the ebook(*externalChp2pg310.css*) to export it as a *29.7cm x 29.7cm* PDF document to fit the huge table.
+| ![](./pics/itext1.png)
 |:---:| 
-| *Click Add* |
-| ![](./pics/JavaBuildPath_Edit_Debug03.png)
-| *Click Next* |
-| ![](./pics/JavaBuildPath_Edit_Debug04.png)
-| *Click Directory and select the installation dir of JDK* |
-| ![](./pics/JavaBuildPath_Edit_Debug05.png)
-| *Select the new JRE you just added* |
-| ![](./pics/JavaBuildPath_Edit_Debug06.png)
-| *Now the Execution environment should allow you to select the correct JDK* |
+| *Content of externalChp2pg310.css document. Here, the output document size, font attributes etc. can be changed to be different from the webpage! * |
+| ![](./pics/itext2.png)
+| *Huge table (below) would be cut off if it were exported as an A4-sized document* |
 
-##### <ins>How to quickly update Maven depedencies to the latest versions</ins>
-For some reason, right-clicking the project -> Maven -> Update Project -> Force Update of Snapshot/Releases **doesn't work**
-| ![](./pics/update_dep_00.png)
+**You may even export out the PDF in any custom font you want.** To do so, simply put the required font files (.otf) into your file directory, then tell *ITextFontResolver class* where it can fined those font files. If you did not do this before exporting, The default font used will be *Times New Roman*, which looks ugly in my opinion. With this method, I exported the PDF as the much neater *Helvetica font*, which is also the font used by [stackoverflow webpages](https://meta.stackoverflow.com/questions/286312/what-fonts-does-stack-overflow-use).
+| ![](./pics/itext3.png)
 |:---:| 
-| *Somehow this doesn't work* |
+| *Embedding fonts into PDF with the ITextFontResolver class* |
 
-**Working solution:** Google search the following dependencies on Maven:
-- opencsv
-- jgrapht
-- junit
-
-Then simply update pom.xml with the latest stable versions. As soon as you save the pom.xml with Ctrl + S, Eclipse instantly updates the Maven Dependencies to the latest version
-
-| ![](./pics/update_dep_01.png)
+### Making every component work together for the final product
+##### <ins>Every function created works together in the *main* function of the *PDFReader* class</ins>
+Simply set the *start_page* & *end_page* integer variables to set the pages to export, and watch how all the modules beautifully work together to export the PDF.
+| ![](./pics/demo1.gif)
 |:---:| 
-| *Before updating the version numbers* |
-| ![](./pics/update_dep_02.png)
-| *After updating the version numbers* |
-| ![](./pics/update_dep_03.png)
-| *You should be able to ping for the latest version by typing* |
-
-##### <ins>How to create a new Java+Maven project while importing</ins>
-###### Continue from Step 6 in the Setting up the project section.
-Tutorial was referenced from [here](https://toolsqa.com/maven/create-new-maven-project-eclipse/).
-
-**7.** Follow according to the pictures
-| ![](./pics/install_new_maven_project_step08.png)
-|:---:| 
-| *Select Import using the New Project Wizard* |
-| ![](./pics/install_new_maven_project_step09.png)
-| *Select Maven Project* |
-| ![](./pics/install_new_maven_project_step10.png)
-| *Deselect everything, then choose Workspace Location* |
-| ![](./pics/install_new_maven_project_step11.png)
-| *With All Catalogs selected, scroll down to find maven-archetype-quickstart, select it then click Next* |
-| ![](./pics/install_new_maven_project_step12.png)
-| *Name your new Maven project (Note: If Artifact Id is the same as your cloned Project name, the clone and the new Maven Project will be merged incorrectly and cause problems. So ensure that your cloned Project and the new Maven Project are in different directories!)* |
+| *Exporting pages 310-312 from NUS Medicine ebook website as PDF* |
 
 
-# Importing the project into Selenium
+
+
+# Downloading & Using this project
 ##### <ins>Basic set up</ins>
 **1.** Install *Eclipse* and *Java Development Kit (JDK)*
 | ![](./pics/JavaBuildPath_Edit_Debug00.png)
@@ -200,3 +175,5 @@ Extract the ChromeDriver zip file into the `java_htmltopdf/src/main/java/java_HT
 | ![](./pics/chromedriver01.png)
 |:---:| 
 |*Leave it in the default name `chromedriver_win32`*|
+
+*And you're done! You should be able to run the script and create the PDF*
