@@ -313,7 +313,7 @@ public class PDFReader {
 //	InputStream inputHTML = null;
 //	HttpURLConnection connection = null;
 //    try {
-//    	// TODO uncomment
+    	// TODO uncomment
 ////    	connection = (HttpURLConnection) url.openConnection(); // cast URLConnection to HttpURLConnection - standard way
 ////		inputHTML = connection.getInputStream();
 ////        connection = (HttpURLConnection) url.openConnection();
