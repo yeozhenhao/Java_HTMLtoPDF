@@ -28,6 +28,9 @@ With permission from the authors, I shared the PDF with my batchmates. It helped
 # How this project works
 In this section, I detail the errors encountered and lessons I learnt, organised by the modules that were eventually used.
 
+### The website makes it too easy to load the different pages of the ebook
+I noticed that if I wanted to load, say *page 245* of the ebook, I would simply just need to change the last few digits of the URL e.g. (ebook_URL)/201 to (ebook_URL)/245 to jump from *page 201* to *page 245*. Thus, you could easily use a loop function to loop through loading through all of the pages of the ebook.
+
 ### Selenium ChromeDriver: the best way to load up HTML5 elements
 ##### <ins>Mistake/Lesson 01: Accessing HTML code using a URI connection in Java instead of reading it from a loaded webpage on Selenium ChromeDriver</ins>
 I initally loaded up webpages using `HttpURLConnection` & `URL` classes to access the HTML code. However, I encountered two errors:
@@ -95,7 +98,7 @@ I created various CSS files as needed for the output PDF. For example, I made a 
 |:---:| 
 | *Content of externalChp2pg310.css document. Here, the output document size, font attributes etc. can be changed to be different from the webpage! * |
 | ![](./pics/itext2.png)
-| *Huge table (below) would be cut off if it were exported as an A4-sized document* |
+| *Huge table (page below) would be cut off if it were exported as an A4-sized page (page above)* |
 
 **You may even export out the PDF in any custom font you want.** To do so, simply put the required font files (.otf) into your file directory, then tell *ITextFontResolver class* where it can fined those font files. If you did not do this before exporting, The default font used will be *Times New Roman*, which looks ugly in my opinion. With this method, I exported the PDF as the much neater *Helvetica font*, which is also the font used by [stackoverflow webpages](https://meta.stackoverflow.com/questions/286312/what-fonts-does-stack-overflow-use).
 | ![](./pics/itext3.png)
@@ -108,8 +111,18 @@ Simply set the *start_page* & *end_page* integer variables to set the pages to e
 | ![](./pics/demo1.gif)
 |:---:| 
 | *Exporting pages 310-312 from NUS Medicine ebook website as PDF* |
+| ![](./pics/demo2.gif)
+| *Exporting pages 263-265 from NUS Medicine ebook website as PDF* |
 
+However, if you run the script for many pages, it may receive a **browser pop-up alert** that informs you that a page failed to load. Thus, you need code to automatically accept the alerts with Selenium ChromeDriver.
+| ![](./pics/alert1.png)
+|:---:| 
+| *Code to automatically accept and alert if it sees one. If alert is not found, then continue script. * |
 
+Sometimes, even after accepting the alert, the ebook reader may randomly just show a blank page. Thus, I coded Selenium to check if *"k-section parsed" HTML element* exists in webpage. If not, then re-run the script for the same page (by using *i--* to re-load the same HTML page of the ebook!).
+| ![](./pics/alert2.png)
+|:---:| 
+| *Without i--, if the script fails to find the "k-section parsed" HTML element, it would move on to export the next page, which is not what we want. * |
 
 
 # Downloading & Using this project
