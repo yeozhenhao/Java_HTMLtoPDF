@@ -31,8 +31,8 @@ In this section, I detail the errors encountered and lessons I learnt, organised
 ### The website makes it too easy to load the different pages of the ebook
 I noticed that if I wanted to load, say *page 245* of the ebook, I would simply just need to change the last few digits of the URL e.g. (ebook_URL)/201 to (ebook_URL)/245 to jump from *page 201* to *page 245*. Thus, you could easily use a loop function to loop through loading through all of the pages of the ebook.
 
-### Module 1/3: Selenium ChromeDriver: the best way to load up HTML5 elements
-##### <ins>Mistake/Lesson 01: Accessing HTML code using a URI connection in Java instead of reading it from a loaded webpage on Selenium ChromeDriver</ins>
+### Module 1/3: Selenium ChromeDriver: the best way to load up HTML5 & WebApp elements
+##### <ins>Mistake/Lesson 01: Accessing HTML code using a URL connection in Java instead of reading it from a loaded webpage on Selenium ChromeDriver</ins>
 I initally loaded up webpages using `HttpURLConnection` & `URL` classes to access the HTML code. However, I encountered two errors:
 | ![](./pics/SCD1.png)
 |:---:| 
@@ -46,7 +46,7 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 |:---:| 
 | *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
 
-**B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) (they can only load basic **HTML**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
+**B.** Despite being able to simulate a true browser connection, I discovered that the `HttpURLConnection` & `URL` classes were simply not good enough to load the [**HTML5 code**](https://www.geeksforgeeks.org/difference-between-html-and-html5/) and **Kotobee ebook reader web application** (the Java classes can only load up **basic HTML elements**). They were also not able to load up the Kotobee ebook reader Web App used by the website to generate the HTML code.
 - Encountered *"The Kotobee reader web application needs to be run through a web server"* error.
 
 
