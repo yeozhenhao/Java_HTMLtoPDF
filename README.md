@@ -1,4 +1,4 @@
-# Java_HTMLtoPDF
+# Java_HTMLtoPDF_Script (with .gif demo below!)
 ## A Java, HTML & CSS Web Scraping project with Selenium ChromeDriver: Creating a PDF version of the latest Mastering Psychiatry ebook on NUSMedicine website
 # What this project is about
 ##### <ins>An essential textbook made better as a PDF</ins>
