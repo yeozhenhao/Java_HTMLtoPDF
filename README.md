@@ -42,7 +42,7 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 - Properties to the connection to simulate a real browser connection (e.g. userAgent, cookies)
 - Added the specific cookies the website is looking after analysing the HTML connection through my own Google Chrome<br>
 > Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**<br>
-| ![](./pics/SCD02.png)
+| ![](./pics/SCD2.png)
 |:---:| 
 | *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
 
