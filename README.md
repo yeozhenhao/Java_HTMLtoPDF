@@ -41,7 +41,8 @@ I initally loaded up webpages using `HttpURLConnection` & `URL` classes to acces
 **A.** The connection was automatically rejected as it detected that I was not a true browser (automated anti-spam detection; as I was using a script to access the URL). I got the error as [shown here](https://stackoverflow.com/questions/38338418/java-jsoup-html-parsing-robot-index-bot-detection-noindex). After analysing the HTTP connection using my own Google Chrome, I added what was needed to make a HTTP connection: 
 - Properties to the connection to simulate a real browser connection (e.g. userAgent, cookies)
 - Added the specific cookies the website is looking after analysing the HTML connection through my own Google Chrome<br>
-> Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**<br>
+> Used HashMap to add cookies in the format: **Cookie names**: `incap_ses_xxxx` & `nlbi_xxxx` with their specific **cookie values**
+
 | ![](./pics/SCD2.png)
 |:---:| 
 | *Added Cookies, UserAgent and a cookie as a header to copy the connection with my own Google Chrome* |
