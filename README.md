@@ -74,7 +74,7 @@ However, we only want to extract the HTML code of the HTML element that is relev
 After inspecting the elements, I discovered that the only relevant HTML element is the element with *class attribute* **"k-section parsed"**. 
 | ![](./pics/jsoup3.png)
 |:---:| 
-| *HTML element "k-section parsed" contains the content. We can confirm this by inspecting a paragraph, and we find that the <p>...</p> paragraph HTML elements are stored under the "k-section parsed" element!* |
+| *HTML element "k-section parsed" contains the content. We can confirm this by inspecting a paragraph, and we find that the (p)...(/p) paragraph HTML elements are stored under the "k-section parsed" element!* |
 | ![](./pics/jsoup4.png)
 
 I then used XPATH to find and retrieve the HTML element I want. With `XPATH_section_to_print = "//section[@class = \"k-section parsed\"]"`, I extracted the HTML element with the class *k-section parsed"*, which happens to be the only HTML element with such a class name in the webpage. 
