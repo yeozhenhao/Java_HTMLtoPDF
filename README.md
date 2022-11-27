@@ -90,14 +90,14 @@ I then used XPATH to find and retrieve the HTML element I want. With `XPATH_sect
 
 **iTextPDF5** easily parses HTML code into a PDF, retaining most of the formatting based *HTML tags (e.g. h1, h2)* and *CSS (Cascading style sheet)* code.
 
-I created various CSS files as needed for the output PDF. For example, I made a CSS document **just for page 310** of the ebook(*externalChp2pg310.css*) to export it as a *29.7cm x 29.7cm* PDF document to fit the huge table.
+I created various CSS files as needed for the output PDF. For example, I made a CSS document **just for page 310** of the ebook (*externalChp2pg310.css*) to export it as a *29.7cm x 29.7cm* PDF document to fit the huge table.
 | ![](./pics/itext1.png)
 |:---:| 
 | *Content of externalChp2pg310.css document. Here, the output document size, font attributes etc. can be changed to be different from the webpage!* |
 | ![](./pics/itext2.png)
 | *Huge table (page below) would be cut off if it were exported as an A4-sized page (page above)* |
 
-**You may even export out the PDF in any custom font you want.** To do so, simply put the required font files (.otf) into your file directory, then tell *ITextFontResolver class* where it can fined those font files. If you did not do this before exporting, The default font used will be *Times New Roman*, which looks ugly in my opinion. With this method, I exported the PDF as the much neater *Helvetica font*, which is also the font used by [stackoverflow webpages](https://meta.stackoverflow.com/questions/286312/what-fonts-does-stack-overflow-use).
+**You may even export out the PDF in any custom font you want.** To do so, simply put the required font files (.otf) into your file directory, then tell *ITextFontResolver class* where it can find those font files. If you did not do this before exporting, The default font used will be *Times New Roman*, which looks ugly in my opinion. With this method, I exported the PDF as the much neater *Helvetica font*, which is also the font used by [stackoverflow webpages](https://meta.stackoverflow.com/questions/286312/what-fonts-does-stack-overflow-use).
 | ![](./pics/itext3.png)
 |:---:| 
 | *Embedding fonts into PDF with the ITextFontResolver class* |
